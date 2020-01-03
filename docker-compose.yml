@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+
+  database:
+    restart: always
+    image: postgres:12.1
+    environment:
+      - POSTGRES_DB=schedule_db
+      - POSTGRES_USER=app_user
+      - POSTGRES_PASSWORD=app_user
+    ports:
+      - "5432:5432"
+
+  api:
+    restart: always
+    build:
+      context: .
+      dockerfile: api.Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - database
