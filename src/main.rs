@@ -2,11 +2,17 @@
 
 #[macro_use] extern crate rocket;
 
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
+#[cfg(test)] mod tests;
+
+mod routes;
+mod api;
+
+fn server() -> rocket::Rocket {
+    rocket::ignite()
+        .register(routes::api_catchers())
+        .mount(routes::ROOT_PATH, routes::api_routes())
 }
 
 fn main() {
-    rocket::ignite().mount("/", routes![index]).launch();
+    server().launch();
 }
